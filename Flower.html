@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <style>
+    .mb {
+      position: absolute;
+      width: 140px;
+      height: 140px;
+      border-radius: 70px;
+      left: 46.25%;
+      bottom: 44%;
+      background: #fff3f5;
+    }
+
+    .bud {
+      position: absolute;
+      width: 140px;
+      height: 140px;
+      left: 46.25%;
+      bottom: 44%;
+      border-radius: 70px;
+      background: #fbad92;
+    }
+
+    .pn {
+      position: absolute;
+      width: 280px;
+      height: 140px;
+      border-radius: 70px;
+      left: -70px;
+      bottom: 4.3em;
+      background: #FFC0CB;
+      transform: rotate(90deg);
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    .pnw {
+      position: absolute;
+      width: 280px;
+      height: 140px;
+      border-radius: 70px;
+      left: -120px;
+      bottom: 3.1em;
+      background: #FFC0CB;
+      transform: rotate(45deg);
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    .pne {
+      position: absolute;
+      width: 280px;
+      height: 140px;
+      border-radius: 70px;
+      right: -120px;
+      bottom: 3.1em;
+      background: #FFC0CB;
+      transform: rotate(-45deg);
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    .ps {
+      position: absolute;
+      width: 280px;
+      height: 140px;
+      border-radius: 70px;
+      left: -70px;
+      top: 4.3em;
+      background: #FFC0CB;
+      transform: rotate(90deg);
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    .pse {
+      position: absolute;
+      width: 280px;
+      height: 140px;
+      border-radius: 70px;
+      right: -15px;
+      top: 3.7em;
+      background: #FFC0CB;
+      transform: rotate(-45deg);
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    .psw {
+      position: absolute;
+      width: 280px;
+      height: 140px;
+      border-radius: 70px;
+      left: -15px;
+      top: 3.7em;
+      background: #FFC0CB;
+      transform: rotate(45deg);
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    .pe {
+      position: absolute;
+      width: 280px;
+      height: 140px;
+      border-radius: 70px;
+      left: -1px;
+      background: #FFC0CB;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    .pw {
+      position: absolute;
+      width: 280px;
+      height: 140px;
+      border-radius: 70px;
+      right: -1px;
+      background: #FFC0CB;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    .message {
+      position: fixed;
+      bottom: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px;
+      border-radius: 5px;
+      opacity: 1;
+      transition: opacity 0.3s ease-in-out;
+      font-size: 86px;
+      font-family: 'Brush Script MT', 'Brush Script Std', cursive;
+    }
+
+    body {
+      background: #ffdbf9;
+      animation-name: change;
+      animation-duration: 2.5s;
+      animation-iteration-count: infinite;
+      overflow: hidden;
+    }
+
+    @keyframes change {
+      50% {
+        background: rgb(242, 226, 255);
+      }
+    }
+  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <canvas></canvas>
+  <div class="mb mb1">
+    <div class="pn" style="background:#fda3df" onclick="hidePetal(this, 'mb1')"></div>
+    <div class="ps" style="background:#fda3df" onclick="hidePetal(this, 'mb1')"></div>
+    <div class="pe" style="background:#fda3df" onclick="hidePetal(this, 'mb1')"></div>
+    <div class="pw" style="background:#fda3df" onclick="hidePetal(this, 'mb1')"></div>
+    <div class="pne" onclick="hidePetal(this, 'mb1')"></div>
+    <div class="pnw" onclick="hidePetal(this, 'mb1')"></div>
+    <div class="pse" onclick="hidePetal(this, 'mb1')"></div>
+    <div class="psw" onclick="hidePetal(this, 'mb1')"></div>
+    <div></div>
+  </div>
+  <div class="mb mb2">
+    <div class="pne" style="background:#e7b3ff" onclick="hidePetal(this, 'mb2')"></div>
+    <div class="pnw" style="background:#e7b3ff" onclick="hidePetal(this, 'mb2')"></div>
+    <div class="pse" style="background:#e7b3ff" onclick="hidePetal(this, 'mb2')"></div>
+    <div class="psw" style="background:#e7b3ff" onclick="hidePetal(this, 'mb2')"></div>
+    <div></div>
+  </div>
+  <div class="mb mb3">
+    <div class="pn" style="background:#dd92ff" onclick="hidePetal(this, 'mb3')"></div>
+    <div class="pw" style="background:#dd92ff" onclick="hidePetal(this, 'mb3')"></div>
+    <div class="pe" style="background:#dd92ff" onclick="hidePetal(this, 'mb3')"></div>
+    <div class="ps" style="background:#dd92ff" onclick="hidePetal(this, 'mb3')"></div>
+    <div></div>
+  </div>
+
+  <div class="bud"></div>
+  <div class="message" id="message"></div>
+
+  <script>
+    let petalsCount = {
+      mb1: 8,
+      mb2: 4,
+      mb3: 4
+    }; // Initial petal counts
+    let totalPetalsCount = 16;
+    let resetTimeout;
+
+    function hidePetal(petal, mbClass) {
+      // Set the opacity of the clicked petal to 0 (invisible)
+      petal.style.opacity = 0;
+      toggleMessage();
+      petalsCount[mbClass]--;
+      totalPetalsCount--;
+      clearTimeout(resetTimeout)
+      resetTimeout = setTimeout(resetFlower, 15000)
+      // Wait for the transition to complete before hiding the petal
+      setTimeout(function () {
+        petal.style.display = "none";
+
+        if (totalPetalsCount === 0) {
+          resetFlower();
+        }
+      }, 300); // Adjust the delay (in milliseconds) to match the transition duration
+    }
+
+    function toggleMessage() {
+      const messageElement = document.getElementById("message");
+
+      if (totalPetalsCount % 2 === 0) {
+        messageElement.textContent = "He loves me not";
+      } else {
+        messageElement.textContent = "He loves me";
+      }
+    }
+
+    function resetFlower() {
+      const flowerElements = document.querySelectorAll(".mb");
+      let petalsCount = {
+        mb1: 8,
+        mb2: 4,
+        mb3: 4
+      };
+      
+      flowerElements.forEach(function (flowerElement) {
+        const petals = flowerElement.querySelectorAll("div");
+        let delay = 0;
+
+        petals.forEach(function (petal, index) {
+          // Set initial opacity to 0 and display to block
+          petal.style.opacity = 0;
+          petal.style.display = "block";
+
+          // Smoothly fade in the petals with a delay
+          setTimeout(function () {
+            petal.style.opacity = 1;
+
+            // After fading in the last petal, update the message
+            if (index === petals.length - 1) {
+              if (totalPetalsCount === 0) {
+                document.getElementById("message").textContent = "";
+              }
+            }
+          }, delay); // Adjust the delay (in milliseconds) for fade-in effect
+
+          delay += 250; // Adjust the delay between each petal for a smooth transition
+        });
+      });
+
+      totalPetalsCount = 16;
+    }
+    const canvas = document.querySelector('canvas')
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
+    const ctx = canvas.getContext('2d')
+
+    const TOTAL = 100
+    const petalArray = []
+
+    const petalImg = new Image()
+    petalImg.src = 'https://djjjk9bjm164h.cloudfront.net/petal.png'
+    petalImg.addEventListener('load', () => {
+      for (let i = 0; i < TOTAL; i++) {
+        petalArray.push(new Petal())
+      }
+      render()
+    })
+
+    function render() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      petalArray.forEach(petal => petal.animate())
+      window.requestAnimationFrame(render)
+    }
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+    })
+
+    let mouseX = 0
+    function touchHandler(e) {
+      mouseX = (e.clientX || e.touches[0].clientX) / window.innerWidth
+    }
+    window.addEventListener('mousemove', touchHandler)
+    window.addEventListener('touchmove', touchHandler)
+
+    // Petal class
+    class Petal {
+      constructor() {
+        this.x = Math.random() * canvas.width
+        this.y = (Math.random() * canvas.height * 2) - canvas.height
+        this.w = 25 + Math.random() * 15
+        this.h = 20 + Math.random() * 10
+        this.opacity = this.w / 40
+        this.flip = Math.random()
+
+        this.xSpeed = 1.5 + Math.random() * 2
+        this.ySpeed = 1 + Math.random() * 1
+        this.flipSpeed = Math.random() * 0.03
+      }
+
+      draw() {
+        if (this.y > canvas.height || this.x > canvas.width) {
+          this.x = -petalImg.width
+          this.y = (Math.random() * canvas.height * 2) - canvas.height
+          this.xSpeed = 1.5 + Math.random() * 2
+          this.ySpeed = 1 + Math.random() * 1
+          this.flip = Math.random()
+        }
+        ctx.globalAlpha = this.opacity
+        ctx.drawImage(
+          petalImg,
+          this.x,
+          this.y,
+          this.w * (0.6 + (Math.abs(Math.cos(this.flip)) / 3)),
+          this.h * (0.8 + (Math.abs(Math.sin(this.flip)) / 5))
+        )
+      }
+
+      animate() {
+        this.x += this.xSpeed + mouseX * 5
+        this.y += this.ySpeed + mouseX * 2
+        this.flip += this.flipSpeed
+        this.draw()
+      }
+    }
+  </script>
+</body>
+
+</html>
